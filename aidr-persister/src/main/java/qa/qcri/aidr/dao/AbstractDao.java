@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractDao<E, I extends Serializable> {
 
-	private Class<E> entityClass;
+	private final Class<E> entityClass;
 
 	protected AbstractDao(Class<E> entityClass) {
 		this.entityClass = entityClass;
@@ -47,9 +47,9 @@ public abstract class AbstractDao<E, I extends Serializable> {
 	}
 
 	
-	public void save(E e) {
+	public Serializable save(E e) {
 		Session session = getCurrentSession();
-		session.save(e);
+		return session.save(e);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -68,7 +68,6 @@ public abstract class AbstractDao<E, I extends Serializable> {
 
 	}
 
-	
 	public void delete(E e) {
 		Session session = getCurrentSession();
 		session.buildLockRequest(LockOptions.UPGRADE).lock(e);
